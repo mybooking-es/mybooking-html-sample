@@ -2,16 +2,18 @@
 
 Copy the repository to a folder and open the 'index.html' file
 
-==Please note that you need to have a Mybooking customer ID and api key.==
+**Please note that you need to have a Mybooking customer ID and api key.**
 
-======================================================
-For more information:
+------------------------------------------------------------------------------
+
+**For more information:**
 https://docs.mybooking.es/motor-de-reservas/desarrolladores/#introduccion
-======================================================
+
+------------------------------------------------------------------------------
 
 ## IMPORTANT
--  For it to work you need a configuration file, create a 'init-vars.js' file with a structure similar to this:
-		```
+-  For it to work you need a configuration file, create a 'init-vars.js' file inside *assets > js* dir with a structure similar to this:
+
 		const mybooking_init_vars = {
 				"mybooking_site_url": "",
 				"mybooking_api_url_prefix": "https://[ACCOUNT_ID].mybooking.es",
@@ -28,6 +30,6 @@ https://docs.mybooking.es/motor-de-reservas/desarrolladores/#introduccion
 				"mybooking_custom_loader": "false",
 				"mybooking_js_select2": "false"
 		};
-		```
+
 
 
