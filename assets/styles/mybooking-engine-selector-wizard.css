@@ -1,0 +1,123 @@
+/*
+*  MYBOOKING RESERVATION ENGINE - WIZARD
+*  -----------------------------------------------------------------------------
+*/
+
+/* Selector */
+
+.mybooking-selector_wizard-group {
+  width: 100%;
+}
+
+/* Wizard modal */
+.mybooking-wizard_container {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  z-index: 1060;
+  width: 100%;
+  height: 100%;
+  padding: 2rem;
+  overflow: auto;
+  background-color: var(--mb-wizard-bg-color);
+}
+
+.mybooking-wizard_close {
+  position: fixed;
+  right: 2rem;
+  top: 4rem;
+  width: auto;
+  cursor: pointer;
+} @media ( min-width: 575.98px ) {
+  .mybooking-wizard_close {
+    right: 2rem;
+    top: 3rem;
+  }
+}
+
+.mybooking-wizard_close .dashicons {
+  font-size: 2rem;
+}
+
+.mybooking-wizard_close .dashicons:hover {
+  color: var(--mb-danger-color);
+}
+
+.mybooking-wizard_step-header {
+	margin: 0 auto;
+  max-width: var(--mb-wizard-content-width);
+}
+
+.mybooking-wizard_step-title {
+  margin-top:  1em;
+  padding-bottom: 1rem;
+  font-size: 28px;
+  font-weight: 700;
+  overflow-x: hidden;
+  overflow-y: hidden;
+  cursor: pointer;
+  text-align: center;
+}
+
+.mybooking-wizard_step-body {
+  display: flex;
+  flex-direction: column;
+  margin: 0 auto;
+  max-width: var(--mb-wizard-content-width);
+}
+
+/* Place step */
+.mybooking-wizard_place {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0.5rem;
+  max-width: 400px;
+  margin: 0 auto 1rem auto;
+  padding: 0;
+  list-style: none;
+}
+
+/* Multiplace */
+.mybooking-wizard_place-filter {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 1rem;
+  margin: 1rem 0;
+  padding-bottom: 1rem;
+  border-bottom: 1px solid var(--mb-border-color);
+} @media ( min-width: 575.98px ) {
+  .mybooking-wizard_place-filter {
+    flex-direction: row;
+  }
+}
+
+.mybooking-wizard_place_title {
+  font-size: 1.3em;
+  font-weight: 700;
+  text-align: center;
+  margin-bottom: 0.5rem;
+}
+
+/* Date step */
+.mybooking-wizard_date {
+  display: flex;
+  justify-content: center;
+}
+
+/* Time step */
+.mybooking-wizard_time {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  max-width: 400px;
+  margin: 0 auto;
+  padding: 0;
+}
+
+.mybooking-wizard_time-item {
+  flex-basis: 20%;
+}
