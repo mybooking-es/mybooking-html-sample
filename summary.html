@@ -64,37 +64,23 @@
           <span class="mybooking-summary_item">
             <span class="mybooking-summary_date">
               <%=booking.date_from_full_format%>
-              <% if (configuration.rentDateSelector === 'date_from_duration' && booking.days == 0) { %>
-                (<%=booking.time_from%> - <%=booking.time_to%>)
-              <% } else if (configuration.timeToFrom) { %>
-                <%=booking.time_from%>
-              <% } %>
+              <%=booking.time_from%>
             </span>
-            <% if (configuration.pickupReturnPlace) { %>
-              <span class="mybooking-summary_place">
-                <%=booking.pickup_place_customer_translation%>
-              </span>
-            <% } %>
+            <span class="mybooking-summary_place">
+              <%=booking.pickup_place_customer_translation%>
+            </span>
           </span>
 
           <!-- Collection -->
-          <% if (configuration.rentDateSelector === 'date_from_date_to' || configuration.pickupReturnPlace) { %>
-            <span class="mybooking-summary_item">
-              <% if (configuration.rentDateSelector === 'date_from_date_to') { %>
-                <span class="mybooking-summary_date">
-                  <%=booking.date_to_full_format%>
-                  <% if (configuration.timeToFrom) { %>
-                    <%=booking.time_to%>
-                  <% } %>
-                </span>
-              <% } %>
-              <% if (configuration.pickupReturnPlace) { %>
-                <span class="mybooking-summary_place">
-                  <%=booking.return_place_customer_translation%>
-                </span>
-              <% } %>
+          <span class="mybooking-summary_item">
+            <span class="mybooking-summary_date">
+              <%=booking.date_to_full_format%>
+                <%=booking.time_to%>
             </span>
-          <% } %>
+            <span class="mybooking-summary_place">
+              <%=booking.return_place_customer_translation%>
+            </span>
+          </span>
 
           <!-- Duration -->
 
@@ -137,7 +123,7 @@
                 <% if (booking.booking_lines[idx].photo_full && booking.booking_lines[idx].photo_full !== '') { %>
                   <img class="mybooking-product_image" src="<%=booking.booking_lines[idx].photo_full%>"/>
                 <% } else { %>
-                  <img class="mybooking-product_image" src="http://localhost:10018/wp-content/plugins/Mybooking-plugin//assets/images/default-image-product.png">
+                  <img class="mybooking-product_image" src="./assets/images/default-image-product.png">
                 <% } %>
               </div>
               <div class="mb-col-md-6">
@@ -145,36 +131,6 @@
                 <!-- // Product name -->
                 <span class="mybooking-product_name">
                   <%=booking.booking_lines[idx].item_description_customer_translation%>
-
-                  <!-- // Quantity -->
-                  <% if (configuration.multipleProductsSelection) { %>
-                    <span class="mybooking-product_quantity">
-                      <%=booking.booking_lines[idx].quantity%>
-                    </span>
-                  <% } %>
-
-                  <!-- Optional external driver + driving license -->
-                  <% if ((typeof booking.optional_external_driver !== '' &&
-                         booking.optional_external_driver) ||
-                        (typeof booking.item_driving_license_type_name !== '' &&
-                         booking.item_driving_license_type_name) ) { %>
-                    <br>
-                    <% if (typeof booking.optional_external_driver !== '' &&
-                          booking.optional_external_driver) { %>
-                      <span class="mb-badge secondary"><%=booking.optional_external_driver%></span>
-                    <% } %>
-                    <% if (typeof booking.item_driving_license_type_name !== '' &&
-                          booking.item_driving_license_type_name) { %>
-                      <span class="mb-badge secondary"><%=booking.item_driving_license_type_name%></span>
-                    <% } %>
-                  <% } %>
-
-                  <% if (typeof booking.item_hired_info !== '' &&
-                          booking.item_hired_info) { %>
-                    <p class="mb-text-muted"><%=booking.item_hired_info%></p>
-                  <% } %>
-
-
                 </span>
 
                 <!-- // Product description -->
@@ -184,19 +140,20 @@
               </div>
             </div>
 
-            <% if (!configuration.hidePriceIfZero || booking.item_cost > 0) { %>
+            <% if (booking.item_cost > 0) { %>
               <div class="mybooking-product_header">
 
                <div class="mybooking-product_price">
-                 <!-- // Price -->
-                 <div class="mybooking-product_amount">
+                  <!-- // Price -->
+                  <div class="mybooking-product_amount">
                    <%=configuration.formatCurrency(booking.booking_lines[idx].item_cost)%>
-                </div>
+                  </div>
 
-                 <!-- // Taxes -->
-                              <div class="mybooking-product_taxes">
-                    Impuestos incluidos              </div>
-                           </div>
+                  <!-- // Taxes -->
+                  <div class="mybooking-product_taxes">
+                    Impuestos incluidos              
+                  </div>
+               </div>
 
                <div class="mybooking-product_discount">
 
@@ -247,19 +204,20 @@
         <% if (booking.booking_extras.length > 0) { %>
           <div class="mb-section">
             <div class="mybooking-summary_details-title">
-              Extras        </div>
+              Extras        
+            </div>
 
-              <% for (var idx=0;idx<booking.booking_extras.length;idx++) { %>
-                <div class="mybooking-summary_extras">
-                  <div class="mybooking-summary_extra-item">
-                    <span class="mb-badge info mybooking-summary_extra-quantity"><%=booking.booking_extras[idx].quantity%></span>
-                    <span class="mybooking-summary_extra-name"><%=booking.booking_extras[idx].extra_description%></span>
-                  </div>
-                  <span class="mybooking-summary_extra-amount">
-                    <%=configuration.formatCurrency(booking.booking_extras[idx].extra_cost)%>
-                  </span>
+            <% for (var idx=0;idx<booking.booking_extras.length;idx++) { %>
+              <div class="mybooking-summary_extras">
+                <div class="mybooking-summary_extra-item">
+                  <span class="mb-badge info mybooking-summary_extra-quantity"><%=booking.booking_extras[idx].quantity%></span>
+                  <span class="mybooking-summary_extra-name"><%=booking.booking_extras[idx].extra_description%></span>
                 </div>
-              <% } %>
+                <span class="mybooking-summary_extra-amount">
+                  <%=configuration.formatCurrency(booking.booking_extras[idx].extra_cost)%>
+                </span>
+              </div>
+            <% } %>
 
           </div>
         <% } %>
@@ -360,6 +318,7 @@
                 </span>
               <% } %>
             </div>
+
           </div>
         <% } %>
 
@@ -377,7 +336,7 @@
 
         <!-- // Total -->
 
-        <% if (!configuration.hidePriceIfZero || booking.total_cost > 0) { %>
+        <% if (booking.total_cost > 0) { %>
 
           <div class="mb-section">
             <div class="mybooking-summary_total">
@@ -399,16 +358,18 @@
 
               <div class="mybooking-summary_total mb--bg-danger">
                 <div class="mybooking-summary_total-label">
-                  Total pendiente            </div>
+                  Total pendiente            
+                </div>
                 <div class="mybooking-summary_total-amount mb-text-negative">
                   <%=configuration.formatCurrency(booking.total_pending)%>
                 </div>
               </div>
             <% } %>
 
-                      <div class="mybooking-product_taxes">
-                Impuestos incluidos          </div>
-                  </div>
+            <div class="mybooking-product_taxes">
+                Impuestos incluidos          
+            </div>
+          </div>
 
         <% } %>
 
