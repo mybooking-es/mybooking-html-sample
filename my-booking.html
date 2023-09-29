@@ -78,37 +78,23 @@
           <span class="mybooking-summary_item">
             <span class="mybooking-summary_date">
               <%=booking.date_from_full_format%>
-              <% if (configuration.rentDateSelector === 'date_from_duration' && booking.days == 0) { %>
-                (<%=booking.time_from%> - <%=booking.time_to%>)
-              <% } else if (configuration.timeToFrom) { %>
-                <%=booking.time_from%>
-              <% } %>
+              <%=booking.time_from%>
             </span>
-            <% if (configuration.pickupReturnPlace) { %>
-              <span class="mybooking-summary_place">
-                <%=booking.pickup_place_customer_translation%>
-              </span>
-            <% } %>
+            <span class="mybooking-summary_place">
+              <%=booking.pickup_place_customer_translation%>
+            </span>
           </span>
 
           <!-- Collection -->
-          <% if (configuration.rentDateSelector === 'date_from_date_to' || configuration.pickupReturnPlace) { %>
-            <span class="mybooking-summary_item">
-              <% if (configuration.rentDateSelector === 'date_from_date_to') { %>
-                <span class="mybooking-summary_date">
-                  <%=booking.date_to_full_format%>
-                  <% if (configuration.timeToFrom) { %>
-                    <%=booking.time_to%>
-                  <% } %>
-                </span>
-              <% } %>
-              <% if (configuration.pickupReturnPlace) { %>
-                <span class="mybooking-summary_place">
-                  <%=booking.return_place_customer_translation%>
-                </span>
-              <% } %>
+          <span class="mybooking-summary_item">
+            <span class="mybooking-summary_date">
+              <%=booking.date_to_full_format%>
+                <%=booking.time_to%>
             </span>
-          <% } %>
+            <span class="mybooking-summary_place">
+              <%=booking.return_place_customer_translation%>
+            </span>
+          </span>
 
           <!-- Duration -->
 
@@ -133,21 +119,6 @@
           <div class="mb-col-md-8">
             <!-- //Customer extra data form -->
             <div id="reservation_form_container" style="display:none"></div>
-            <% if (configuration.guests) { %>
-              <!-- Passengers -->
-              <br/>
-              <div id="passengers_container" class="mb-card" style="display:none">
-                <div class="mb-card_header">
-                  <h3 class="mb-form_title">
-                    Pasajeros                  </h3>
-                </div>
-                <div class="mb-card_body">
-                  <div id="passengers_table_container"></div>
-                  <div id="passengers_form_container"></div>
-                </div>
-              </div>
-              <!-- End passengers -->
-            <% } %>
           </div>
         <% } %>
 
@@ -162,6 +133,7 @@
           <% for (var idx=0;idx<booking.booking_lines.length;idx++) { %>
 
             <div class="mb-section">
+              
               <div class="mb-card">
                 <div class="mb-col-md-12">
 
@@ -169,41 +141,12 @@
                   <% if (booking.booking_lines[idx].photo_full && booking.booking_lines[idx].photo_full !== '') { %>
                     <img class="mybooking-product_image" src="<%=booking.booking_lines[idx].photo_full%>"/>
                   <% } else { %>
-                    <img class="mybooking-product_image" src="http://localhost:10018/wp-content/plugins/Mybooking-plugin//assets/images/default-image-product.png">
+                    <img class="mybooking-product_image" src="./assets/images/default-image-product.png">
                   <% } %>
 
                   <!-- // Product name -->
                   <span class="mybooking-product_name">
                     <%=booking.booking_lines[idx].item_description_customer_translation%>
-
-                    <!-- // Quantity -->
-                    <% if (configuration.multipleProductsSelection) { %>
-                      <span class="mybooking-product_quantity">
-                        <%=booking.booking_lines[idx].quantity%>
-                      </span>
-                    <% } %>
-
-                    <!-- Optional external driver + driving license -->
-                    <% if ((typeof booking.optional_external_driver !== '' &&
-                           booking.optional_external_driver) ||
-                          (typeof booking.item_driving_license_type_name !== '' &&
-                           booking.item_driving_license_type_name) ) { %>
-                      <br>
-                      <% if (typeof booking.optional_external_driver !== '' &&
-                            booking.optional_external_driver) { %>
-                        <span class="mb-badge secondary"><%=booking.optional_external_driver%></span>
-                      <% } %>
-                      <% if (typeof booking.item_driving_license_type_name !== '' &&
-                            booking.item_driving_license_type_name) { %>
-                        <span class="mb-badge secondary"><%=booking.item_driving_license_type_name%></span>
-                      <% } %>
-                    <% } %>
-
-                    <% if (typeof booking.item_hired_info !== '' &&
-                            booking.item_hired_info) { %>
-                      <p class="mb-text-muted"><%=booking.item_hired_info%></p>
-                    <% } %>
-
                   </span>
 
                   <!-- //Product description -->
@@ -213,60 +156,58 @@
                 </div>
               </div>
 
-              <% if (!configuration.hidePriceIfZero || booking.item_cost > 0) { %>
-                <div class="mybooking-product_header">
-                 <div class="mybooking-product_price">
+              <div class="mybooking-product_header">
+                <div class="mybooking-product_price">
 
-                   <!-- //Price -->
-                   <div class="mybooking-product_amount">
-                     <%=configuration.formatCurrency(booking.booking_lines[idx].item_cost)%>
+                  <!-- //Price -->
+                  <div class="mybooking-product_amount">
+                    <%=configuration.formatCurrency(booking.booking_lines[idx].item_cost)%>
                   </div>
 
-                   <!-- // Taxes -->
-                                      <div class="mybooking-product_taxes">
-                      Impuestos incluidos                    </div>
-                                   </div>
-              <% } %>
+                  <!-- // Taxes -->
+                  <div class="mybooking-product_taxes">
+                      Impuestos incluidos                    
+                  </div>
+    
+                  <div class="mybooking-product_discount">
+                    <!-- // Offer/Promotion Code Appliance -->
+                    <% if (booking.booking_lines[idx].item_unit_cost_base != booking.booking_lines[idx].item_unit_cost) { %>
+                      <div class="mybooking-product_price">
 
-               <div class="mybooking-product_discount">
+                        <% if (booking.booking_lines[idx].item_unit_cost < booking.booking_lines[idx].item_unit_cost_base) { %>
+                          <span class="mybooking-product_original-price">
+                            <%=configuration.formatCurrency(booking.booking_lines[idx].item_unit_cost_base * booking.booking_lines[idx].quantity)%>
+                          </span>
+                        <% } %>
 
-                 <!-- // Offer/Promotion Code Appliance -->
-                 <% if (booking.booking_lines[idx].item_unit_cost_base != booking.booking_lines[idx].item_unit_cost) { %>
-                   <div class="mybooking-product_price">
+                        <!-- // Offer -->
+                        <% if (typeof booking.booking_lines[idx].offer_name !== 'undefined' && booking.booking_lines[idx].offer_name !== null && booking.booking_lines[idx].offer_name !== '') { %>
+                          <% if (booking.booking_lines[idx].offer_discount_type === 'percentage' && booking.booking_lines[idx].offer_value !== '') {%>
+                            <span class="mybooking-product_discount-badge mb-badge success">
+                              - <%=parseInt(booking.booking_lines[idx].offer_value)%>&#37;
+                            </span>
+                          <% } %>
+                            <span class="mybooking-product_discount-badge mb-badge info">
+                              <%=booking.booking_lines[idx].offer_name%>
+                            </span>
+                        <% } %>
 
-                     <% if (booking.booking_lines[idx].item_unit_cost < booking.booking_lines[idx].item_unit_cost_base) { %>
-                       <span class="mybooking-product_original-price">
-                         <%=configuration.formatCurrency(booking.booking_lines[idx].item_unit_cost_base * booking.booking_lines[idx].quantity)%>
-                       </span>
-                     <% } %>
-
-                     <!-- // Offer -->
-                     <% if (typeof booking.booking_lines[idx].offer_name !== 'undefined' && booking.booking_lines[idx].offer_name !== null && booking.booking_lines[idx].offer_name !== '') { %>
-                       <% if (booking.booking_lines[idx].offer_discount_type === 'percentage' && booking.booking_lines[idx].offer_value !== '') {%>
-                         <span class="mybooking-product_discount-badge mb-badge success">
-                           - <%=parseInt(booking.booking_lines[idx].offer_value)%>&#37;
-                         </span>
-                       <% } %>
-                        <span class="mybooking-product_discount-badge mb-badge info">
-                          <%=booking.booking_lines[idx].offer_name%>
-                        </span>
-                     <% } %>
-
-                     <!-- // Promotion Code -->
-                     <% if (typeof booking.promotion_code !== 'undefined' && booking.promotion_code !== '' && typeof booking.booking_lines[idx].promotion_code !== 'undefined' && booking.booking_lines.promotion_code !== '') { %>
-                       <% if (booking.booking_lines[idx].promotion_code_discount_type === 'percentage' && booking.booking_lines[idx].promotion_code_value !== '') {%>
-                         <span class="mybooking-product_discount-badge mb-badge success">
-                           <%=parseInt(booking.booking_lines[idx].promotion_code_value)%>&#37;
-                         </span>
-                         <span class="mybooking-product_discount-badge mb-badge success">
-                           <%=booking.promotion_code%>
-                         </span>
-                       <% } %>
-                     <% } %>
-                   </div>
-                 <% } %>
-               </div>
-             </div>
+                        <!-- // Promotion Code -->
+                        <% if (typeof booking.promotion_code !== 'undefined' && booking.promotion_code !== '' && typeof booking.booking_lines[idx].promotion_code !== 'undefined' && booking.booking_lines.promotion_code !== '') { %>
+                          <% if (booking.booking_lines[idx].promotion_code_discount_type === 'percentage' && booking.booking_lines[idx].promotion_code_value !== '') {%>
+                            <span class="mybooking-product_discount-badge mb-badge success">
+                              <%=parseInt(booking.booking_lines[idx].promotion_code_value)%>&#37;
+                            </span>
+                            <span class="mybooking-product_discount-badge mb-badge success">
+                              <%=booking.promotion_code%>
+                            </span>
+                          <% } %>
+                        <% } %>
+                      </div>
+                    <% } %>
+                  </div>
+                </div>  
+              </div>
             </div>
           <% } %>
 
@@ -431,9 +372,10 @@
                 </li>
               </ul>
 
-                              <div class="mybooking-product_taxes">
-                  Impuestos incluidos                </div>
-                          </div>
+              <div class="mybooking-product_taxes">
+                  Impuestos incluidos                
+              </div>
+            </div>
           <% } %>
 
           <!-- // Customer details -->
@@ -1123,12 +1065,12 @@
             La confirmación de la reserva se realiza de forma segura en la <b>plataforma de pago</b>, una vez haya completado el formulario de reserva. Puede usar <u>Paypal</u> o <u>tarjeta de crédito</u> para realizar el pago.      </div>
           <div class="mybooking-payment_confirmation-box">
            <label class="mybooking-payment_custom-label" for="payments_paypal_standard">
-            <img src="http://localhost:10018/wp-content/plugins/Mybooking-plugin//assets/images/pm-paypal.jpg"/>
+            <img src="./assets/images/pm-paypal.jpg"/>
             <input type="radio" id="payments_paypal_standard" name="payment_method_select" class="payment_method_select" value="paypal_standard">Paypal       </label>
 
            <label class="mybooking-payment_custom-label" for="payments_credit_card">
-            <img src="http://localhost:10018/wp-content/plugins/Mybooking-plugin//assets/images/pm-visa.jpg"/>
-            <img src="http://localhost:10018/wp-content/plugins/Mybooking-plugin//assets/images/pm-mastercard.jpg"/>
+            <img src="./assets/images/pm-visa.jpg"/>
+            <img src="./assets/images/pm-mastercard.jpg"/>
             <input type="radio" id="payments_credit_card" name="payment_method_select" class="payment_method_select" value="<%=sales_process.payment_methods.tpv_virtual%>">Tarjeta de crédito/débito       </label>
           </div>
           <div class="mb-row">
@@ -1141,9 +1083,9 @@
           <div class="mb-alert secondary" role="alert">
             La confirmación de la reserva se realiza de forma segura en la <b>plataforma Paypal</b>, una vez haya completado el formulario de reserva. Puede usar <u>Paypal</u> o <u>tarjeta de crédito</u> para realizar el pago.      </div>
           <div class="mybooking-payment_confirmation-box">
-            <img src="http://localhost:10018/wp-content/plugins/Mybooking-plugin//assets/images/pm-paypal.jpg"/>
-            <img src="http://localhost:10018/wp-content/plugins/Mybooking-plugin//assets/images/pm-visa.jpg"/>
-            <img src="http://localhost:10018/wp-content/plugins/Mybooking-plugin//assets/images/pm-mastercard.jpg"/>
+            <img src="./assets/images/pm-paypal.jpg"/>
+            <img src="./assets/images/pm-visa.jpg"/>
+            <img src="./assets/images/pm-mastercard.jpg"/>
           </div>
           <input type="hidden" name="payment_method_id" value="paypal_standard"/>
 
@@ -1151,8 +1093,8 @@
           <div class="mb-alert secondary" role="alert">
             La confirmación de la reserva se realiza de forma segura en la <b>plataforma bancaria</b>, una vez haya completado el formulario de reserva.      </div>
           <div class="mybooking-payment_confirmation-box">
-            <img src="http://localhost:10018/wp-content/plugins/Mybooking-plugin//assets/images/pm-visa.jpg"/>
-            <img src="http://localhost:10018/wp-content/plugins/Mybooking-plugin//assets/images/pm-mastercard.jpg"/>
+            <img src="./assets/images/pm-visa.jpg"/>
+            <img src="./assets/images/pm-mastercard.jpg"/>
           </div>
 
           <input type="hidden" name="payment_method_id" value="<%=sales_process.payment_methods.tpv_virtual%>"/>
@@ -1197,155 +1139,6 @@
       </ul>
     </script>
 
-    <!-- PASSENGERS  BLOCK ----------------------------------------------------------->
-    <script type="text/tmpl" id="script_passengers_table">
-      <div id="passengers_list">
-        <div id="passengers_list__not_data" style="display:none">
-          No se encontraron pasajeros en la reserva    </div>
-        <div id="passengers_list__content">
-        </div>
-    </script>
-    <script type="text/tmpl" id="script_passengers_form">
-      <br />
-      <div id="passengers_error" class="alert alert-danger" style="display: none;"></div>
-      <form id="booking_passengers_form" name="booking_passengers_form">
-        <div class="mb-form-row">
-          <div class="mb-form-group mb-col-md-6">
-            <label for="passenger_name">
-              Nombre          *
-            </label>
-            <input class="form-control" id="passenger_name" name="passenger_name" type="text"
-              placeholder="<%=configuration.escapeHtml(" Nombre")%>"
-            value=""
-            maxlength="40" <% if (!booking.can_edit_online){%>disabled<%}%>>
-          </div>
-          <div class="mb-form-group mb-col-md-6">
-            <label for="">
-              Apellidos          *
-            </label>
-            <input class="form-control" id="passenger_surname" name="passenger_surname" type="text"
-              placeholder="<%=configuration.escapeHtml(" Apellidos")%>" value=""
-            maxlength="40" <% if (!booking.can_edit_online){%>disabled<%}%>>
-          </div>
-        </div>
-        <div class="mb-form-row">
-          <div class="mb-form-group mb-col-md-12">
-            <label for="passenger_document_id">
-              DNI o pasaporte          *
-            </label>
-            <input class="form-control" id="passenger_document_id" name="passenger_document_id" type="text"
-              placeholder="<%=configuration.escapeHtml(" DNI o pasaporte")%>" value=""
-            maxlength="50" <% if (!booking.can_edit_online){%>disabled<%}%>>
-          </div>
-          <!-- <div class="mb-form-group mb-col-md-6">
-            <label for="passenger_document_id_date">
-              Fecha de emisión        </label>
-            <div class="custom-date-form">
-              <div class="custom-date-item">
-                <select name="passenger_document_id_date_day" id="passenger_document_id_date_day" class="form-control" <% if
-                  (!booking.can_edit_online){%>disabled<%}%>></select>
-              </div>
-              <div class="custom-date-item">
-                <select name="passenger_document_id_date_month" id="passenger_document_id_date_month" class="form-control" <%
-                  if (!booking.can_edit_online){%>disabled<%}%>></select>
-              </div>
-              <div class="custom-date-item">
-                <select name="passenger_document_id_date_year" id="passenger_document_id_date_year" class="form-control" <% if
-                  (!booking.can_edit_online){%>disabled<%}%>></select>
-              </div>
-            </div>
-            <input type="hidden" name="passenger_document_id_date" id="passenger_document_id_date"></input>
-          </div> -->
-        </div>
-        <div class="mb-form-row">
-          <div class="mb-form-group mb-col-md-6">
-            <label for="passenger_email">
-              Correo electrónico        </label>
-            <input class="form-control" id="passenger_email" name="passenger_email" type="text"
-              placeholder="<%=configuration.escapeHtml(" Correo electrónico")%>"
-            value=""
-            maxlength="50" <% if (!booking.can_edit_online){%>disabled<%}%>>
-          </div>
-          <div class="mb-form-group mb-col-md-6">
-            <label for="passenger_phone_number">
-              Número de teléfono        </label>
-            <input class="form-control" id="passenger_phone_number" name="passenger_phone_number" type="text"
-              placeholder="<%=configuration.escapeHtml(" Número de teléfono")%>"
-            value=""
-            maxlength="50" <% if (!booking.can_edit_online){%>disabled<%}%>>
-          </div>
-        </div>
-        <div class="mb-form-row">
-          <div class="mb-form-group mb-col-md-12">
-            <label for="passenger_notes">
-              Notas        </label>
-            <input class="form-control" id="passenger_notes" name="passenger_notes" type="text"
-              placeholder="<%=configuration.escapeHtml(" Notas")%>"
-            value=""
-            maxlength="50" <% if (!booking.can_edit_online){%>disabled<%}%>>
-          </div>
-        </div>
-
-        <div id="booking_passengers_form_errors" class="mb-alert danger" style="display:none;"></div>
-
-        <div class="mb-card_footer" style="margin: 0 -1rem;">
-          <button class="mb-button" id="btn_add_passenger" <% if (!booking.can_edit_online){%>disabled<%}%>>
-            Añadir un nuevo pasajero      </button>
-        </div>
-      </form>
-    </script>
-    <script type="text/tmpl" id="script_passengers_list__item">
-      <div style="padding: 0.5rem 0; font-size: 14px; clear:both;">
-        <div class="mb-form-row" style="display: flex; align-items: center; justify-content: flex-start;">
-          <div class="mb-form-group mb-col-xs-1" style="width: 5%; margin-right: 1rem;">
-            <span class="mb-badge info" style="position: relative; top: -0.1rem;"><%= index %></span>
-          </div>
-          <div class="mb-form-group mb-col-xs-9" style="width: 85%;">
-            <h6 style="margin: 0;">
-              <%= passenger.name %> <%= passenger.surname %>
-            </h6>
-          </div>
-          <div class="mb-form-group mb-col-xs-2" style="width: 10%;">
-            <button class="btn float-right" id="btn_remove_passenger" title="Eliminar" data-id="<%= passenger.id %>">
-              <i class="mb-button icon"><span class="dashicons dashicons-trash"></span></i>
-            </button>
-          </div>
-        </div>
-        <div class="mb-form-row">
-          <div class="mb-form-group mb-col-sm-4">
-            <b>
-              DNI o pasaporte        </b>
-            <br />
-            <%= passenger.document_id %>
-          </div>
-          <!-- <div class="mb-form-group mb-col-sm-4">
-            <b>
-              Fecha de emisión        </b>
-            <br />
-          </div> -->
-          <div class="mb-form-group mb-col-sm-4">
-            <b>
-              Correo electrónico        </b>
-            <br />
-            <%= passenger.email %>
-          </div>
-          <div class="mb-form-group mb-col-sm-4">
-            <b>
-              Número de teléfono        </b>
-            <br />
-            <%= passenger.phone_number %>
-          </div>
-        </div>
-        <div class="mb-form-row">
-          <div class="mb-form-group mb-col-sm-12" style="margin-bottom: 0;">
-            <b>
-              Notas        </b>
-            <br />
-            <%= passenger.notes %>
-          </div>
-        </div>
-      </div>
-    </script>
 		<!-- ==== END TEMPLATES ==== -->
 
     <!-- ==== SCRIPTS ==== -->
